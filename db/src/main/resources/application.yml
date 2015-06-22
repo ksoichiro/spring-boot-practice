@@ -1,0 +1,9 @@
+spring:
+    jpa:
+        hibernate:
+            ddl-auto: ''
+    thymeleaf:
+        cache: false
+security:
+    basic:
+        enabled: false
