@@ -3,9 +3,8 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath "org.springframework.boot:spring-boot-gradle-plugin:1.2.3.RELEASE"
-        classpath "org.springframework:springloaded:1.2.1.RELEASE"
-        classpath "org.springframework.boot:spring-boot-starter-security:1.2.3.RELEASE"
+        classpath "org.springframework.boot:spring-boot-gradle-plugin:1.2.5.RELEASE"
+        classpath "org.springframework:springloaded:1.2.4.RELEASE"
     }
 }
 
@@ -20,13 +19,9 @@ repositories {
 }
 
 dependencies {
-    compile 'org.projectlombok:lombok:1.16.2'
+    compile "org.projectlombok:lombok:1.16.2"
     compile "org.springframework.boot:spring-boot-starter-web"
     compile "org.springframework.boot:spring-boot-starter-thymeleaf"
-    compile "org.springframework.boot:spring-boot-starter-data-jpa"
-    compile "org.springframework.boot:spring-boot-starter-security"
-    compile "org.thymeleaf.extras:thymeleaf-extras-springsecurity3:2.1.2.RELEASE"
-    compile "org.thymeleaf.extras:thymeleaf-extras-conditionalcomments:2.1.1.RELEASE"
     compile "com.h2database:h2"
 }
 
