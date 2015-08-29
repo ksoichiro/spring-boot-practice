@@ -5,7 +5,7 @@ import lombok.Data;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import java.util.List;
 
 @Entity
@@ -16,6 +16,6 @@ public class Role {
     private Integer id;
     private String name;
 
-    @ManyToMany
+    @OneToMany
     private List<Permission> permissions;
 }

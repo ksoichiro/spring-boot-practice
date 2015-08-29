@@ -13,8 +13,8 @@ public class Permission {
     private Integer id;
     private String name;
 
-    @ManyToMany
-    @JoinTable(name = "role_permission",
+    @OneToMany
+    @JoinTable(name = "RolePermission",
             joinColumns = @JoinColumn(name = "permission_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private List<Role> roles;
