@@ -2,8 +2,9 @@ package com.example.spring.domain;
 
 import lombok.Data;
 
-import javax.persistence.*;
-import java.util.List;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 
 @Entity
 @Data
@@ -12,10 +13,4 @@ public class Permission {
     @GeneratedValue
     private Integer id;
     private String name;
-
-    @ManyToMany
-    @JoinTable(name = "RolePermission",
-            joinColumns = @JoinColumn(name = "permission_id"),
-            inverseJoinColumns = @JoinColumn(name = "role_id"))
-    private List<Role> roles;
 }
