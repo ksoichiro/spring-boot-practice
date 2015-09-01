@@ -13,9 +13,6 @@ public class Permission {
     private Integer id;
     private String name;
 
-    @OneToMany
-    @JoinTable(name = "RolePermission",
-        joinColumns = @JoinColumn(name = "permission_id"),
-        inverseJoinColumns = @JoinColumn(name = "id"))
+    @OneToMany(mappedBy = "permission")
     private List<RolePermission> rolePermission;
 }

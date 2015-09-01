@@ -2,10 +2,7 @@ package com.example.spring.domain;
 
 import lombok.Data;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 
 @Entity
 @Data
@@ -18,5 +15,6 @@ public class RolePermission {
     private Role role;
 
     @ManyToOne
+    @JoinColumn(name = "permission_id")
     private Permission permission;
 }
