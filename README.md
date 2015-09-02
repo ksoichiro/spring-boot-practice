@@ -6,6 +6,11 @@ This is a project to show how-to for Spring Boot application development.
 
 To check each topics, see each sub-directories' README.
 
+## Notice
+
+* This project uses Java 8 lambda expression.
+* This project uses Lombok to generate getters/setters.
+
 ## License
 
     Copyright 2015 Soichiro Kashima
