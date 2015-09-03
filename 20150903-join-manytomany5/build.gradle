@@ -1,0 +1,73 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath "org.springframework.boot:spring-boot-gradle-plugin:1.2.5.RELEASE"
+        classpath "org.springframework:springloaded:1.2.4.RELEASE"
+    }
+}
+
+def vJavaLang = 1.8
+
+apply plugin: 'java'
+apply plugin: 'idea'
+apply plugin: 'spring-boot'
+
+repositories {
+    jcenter()
+}
+
+configurations {
+    provided
+}
+
+dependencies {
+    provided "com.querydsl:querydsl-apt:4.0.4"
+    compile "org.projectlombok:lombok:1.16.2"
+    compile "org.springframework.boot:spring-boot-starter-web"
+    compile "org.springframework.boot:spring-boot-starter-thymeleaf"
+    compile "org.springframework.boot:spring-boot-starter-data-jpa"
+    compile "com.querydsl:querydsl-codegen:4.0.4"
+    compile "com.querydsl:querydsl-jpa:4.0.4"
+    compile "com.h2database:h2"
+    testCompile "org.springframework.boot:spring-boot-starter-test"
+}
+
+def querydslDir = file('src/main/generated')
+
+task generateQuerydsl(type: JavaCompile) {
+    source = sourceSets.main.java
+    classpath = configurations.compile + configurations.provided
+    destinationDir = querydslDir
+    options.compilerArgs += [
+        '-proc:only',
+        '-processor', 'com.querydsl.apt.jpa.JPAAnnotationProcessor'
+    ]
+}
+
+compileJava {
+    dependsOn generateQuerydsl
+    sourceSets.main.java.srcDir querydslDir
+}
+
+clean {
+    delete querydslDir
+}
+
+idea {
+    module {
+        inheritOutputDirs = false
+        outputDir = file("${buildDir}/classes/main")
+    }
+    project {
+        languageLevel = vJavaLang
+        ipr {
+            withXml { provider ->
+                def mapping = provider.node.component.find { it.@name == 'VcsDirectoryMappings' }.mapping
+                mapping.@vcs = 'Git'
+                mapping.@directory = '$PROJECT_DIR$'
+            }
+        }
+    }
+}
