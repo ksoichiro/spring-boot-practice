@@ -2,9 +2,20 @@
 
 [![Build Status](https://travis-ci.org/ksoichiro/spring-boot-practice.svg?branch=master)](https://travis-ci.org/ksoichiro/spring-boot-practice)
 
-This is a project to show how-to for Spring Boot application development.
+This is a project to show 'how-to' for Spring Boot application development.  
 
 To check each topics, see each sub-directories' README.
+
+## Contents
+
+1. [Hello world](20150622-hello-world)
+1. [Connecting to database](20150622-db)
+1. Join tables
+    1. [Join using ManyToMany annotation](20150829-join-manytomany)
+    1. [Join using OneToMany annotation](20150829-join-manytomany2)
+    1. [Join using JPQL with association table](20150829-join-manytomany3)
+    1. [Join using JPA Specification](20150901-join-manytomany4)
+    1. [Join using Querydsl](20150903-join-manytomany5)
 
 ## Notice
 
