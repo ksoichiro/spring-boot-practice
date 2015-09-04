@@ -19,8 +19,11 @@ To check each topics, see each sub-directories' README.
 
 ## Notice
 
+* This project uses Gradle and developed with IntelliJ IDEA.
 * This project uses Java 8 lambda expression.
+    * Please set Gradle JVM to Java 8 to build properly.
 * This project uses Lombok to generate getters/setters.
+    * Please set Annotation Processor function enabled (Preferences > Build, Execution, Deployment > Compiler > Enable annotation processing).
 
 ## License
 
