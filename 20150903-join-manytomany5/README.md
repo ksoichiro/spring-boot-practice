@@ -4,7 +4,8 @@
 
 N:N table join example using Spring Data JPA.
 
-This example has association table entity (`RolePermission`).
+This example has association table entity (`RolePermission`) and
+construct query using Querydsl.
 
 ## Launch
 
