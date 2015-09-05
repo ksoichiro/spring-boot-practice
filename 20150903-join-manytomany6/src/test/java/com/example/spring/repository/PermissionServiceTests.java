@@ -8,6 +8,9 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.util.List;
@@ -31,5 +34,14 @@ public class PermissionServiceTests {
         permissions = permissionService.findAllByRoleId(2);
         assertNotNull(permissions);
         assertEquals(5, permissions.size());
+    }
+
+    @Test
+    public void findAllWithPageable() {
+        Pageable pageable = new PageRequest(0, 3);
+        Page<Permission> page = permissionService.findAllByRoleId(2, pageable);
+        assertEquals(2, page.getTotalPages());
+        assertEquals(0, page.getNumber());
+        assertEquals(3, page.getNumberOfElements());
     }
 }
