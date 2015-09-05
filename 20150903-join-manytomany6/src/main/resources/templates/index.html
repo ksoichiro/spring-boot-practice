@@ -1,0 +1,12 @@
+<html xmlns:th="">
+<body>
+<table>
+<tr th:each="entity : ${permissionList}">
+    <td th:text="${entity.id}"></td>
+    <td th:text="${entity.name}"></td>
+</tr>
+</table>
+<a th:href="@{/?page=0}">1</a>
+<a th:href="@{/?page=1}">2</a>
+</body>
+</html>
