@@ -1,4 +1,4 @@
-# Table join example (ManyToMany) II
+# Table join example (ManyToMany) 3
 
 ## About
 
