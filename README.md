@@ -17,6 +17,7 @@ To check each topics, see each sub-directories' README.
     1. [Join using JPA Specification](20150901-join-manytomany4)
     1. [Join using Querydsl](20150903-join-manytomany5)
     1. [Join using Querydsl with pagination](20150903-join-manytomany6)
+    1. [Join using Querydsl with soft delete](20150903-join-manytomany7)
 
 ## Notice
 
