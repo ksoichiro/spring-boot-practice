@@ -1,0 +1,10 @@
+spring:
+    jpa:
+        show-sql: true
+        hibernate:
+            ddl-auto: ''
+logging:
+    level:
+        org.springframework.test: DEBUG
+        org.springframework.transaction: DEBUG
+        org.springframework.jdbc.core: DEBUG
