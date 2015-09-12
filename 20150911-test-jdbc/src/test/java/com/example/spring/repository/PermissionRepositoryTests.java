@@ -11,12 +11,17 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.transaction.TestTransaction;
+import org.springframework.test.context.transaction.TransactionConfiguration;
+import org.springframework.transaction.annotation.Transactional;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = App.class)
+@TransactionConfiguration
+@Transactional
 @ActiveProfiles("test")
 @Sql("/data-test.sql")
 @Slf4j
@@ -37,10 +42,16 @@ public class PermissionRepositoryTests extends AbstractTransactionalJUnit4Spring
         assertEquals("CREATE_USER", p.getName());
 
         jdbcTemplate.execute("update permission set name = 'BAR' where id = 1;");
-        // This does not execute select, why?
+        // This does not execute select
         p = permissionRepository.findOne(1);
         assertNotNull(p);
         assertEquals("CREATE_USER", p.getName()); // OMG!
-        // assertEquals("BAR", p.getName()); // This is the really expected result
+
+        TestTransaction.flagForCommit();
+        TestTransaction.end();
+
+        // Transaction has been committed, so we can get the new result
+        p = permissionRepository.findOne(1);
+        assertEquals("BAR", p.getName()); // This is the really expected result
     }
 }
