@@ -1,0 +1,5 @@
+spring:
+    thymeleaf:
+        cache: false
+    messages:
+        cache-seconds: 0
