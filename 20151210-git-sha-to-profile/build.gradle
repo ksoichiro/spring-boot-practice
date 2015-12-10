@@ -25,7 +25,7 @@ dependencies {
     compile "org.springframework.boot:spring-boot-devtools"
 }
 
-ext.gitSha = "git rev-parse HEAD".execute().text.trim()
+ext.gitSha = "git rev-parse --short HEAD".execute().text.trim()
 
 processResources {
     filesMatching('**/*.yml') {

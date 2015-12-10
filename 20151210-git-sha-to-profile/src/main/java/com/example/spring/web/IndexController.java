@@ -8,12 +8,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 @RequestMapping
 public class IndexController {
-    @Value("${application.version}")
-    private String version;
+    @Value("${application.revision}")
+    private String revision;
 
     @RequestMapping("/")
     public String index(Model model) {
-        model.addAttribute("version", version);
+        model.addAttribute("revision", revision);
         return "index";
     }
 }

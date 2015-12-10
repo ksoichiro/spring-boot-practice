@@ -4,4 +4,4 @@ spring:
     messages:
         cache-seconds: 0
 application:
-    version: ${gitSha}
+    revision: ${gitSha}
