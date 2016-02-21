@@ -1,0 +1,64 @@
+buildscript {
+    repositories {
+        mavenCentral()
+        maven {
+            url 'https://oss.sonatype.org/content/repositories/snapshots/'
+        }
+    }
+    dependencies {
+        classpath "org.springframework.boot:spring-boot-gradle-plugin:1.3.2.RELEASE"
+        classpath 'com.github.ksoichiro:gradle-web-resource-plugin:1.5.0-SNAPSHOT'
+    }
+}
+
+def vJavaLang = 1.8
+
+apply plugin: 'java'
+apply plugin: 'idea'
+apply plugin: 'spring-boot'
+apply plugin: 'com.github.ksoichiro.web.resource'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile "org.projectlombok:lombok:1.16.2"
+    compile "org.springframework.boot:spring-boot-starter-web"
+    compile "org.springframework.boot:spring-boot-starter-thymeleaf"
+    compile "org.springframework.boot:spring-boot-devtools"
+    compile "com.h2database:h2"
+}
+
+webResource {
+    base {
+        dest "build/resources/main/static"
+    }
+    bower {
+        dependencies {
+            install name: 'jquery', version: '1.11.2', filter: ['dist/*.min.*']
+            install name: 'bootstrap', version: '3.3.4', filter: ['dist/css/*.min.css', 'dist/js/*.min.js', 'dist/fonts/*']
+        }
+    }
+}
+classes.dependsOn 'webResourceCompile'
+
+idea {
+    module {
+        inheritOutputDirs = false
+        outputDir = file("${buildDir}/classes/main")
+        excludeDirs += [
+            file('src/main/resources/static/lib'),
+        ]
+    }
+    project {
+        languageLevel = vJavaLang
+        ipr {
+            withXml { provider ->
+                def mapping = provider.node.component.find { it.@name == 'VcsDirectoryMappings' }.mapping
+                mapping.@vcs = 'Git'
+                mapping.@directory = '$PROJECT_DIR$'
+            }
+        }
+    }
+}
