@@ -1,0 +1,67 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath "org.springframework.boot:spring-boot-gradle-plugin:1.3.3.RELEASE"
+        classpath 'com.github.ksoichiro:gradle-web-resource-plugin:1.7.0'
+        classpath 'com.github.ksoichiro:gradle-build-info-plugin:0.1.5'
+    }
+}
+
+def vJavaLang = 1.8
+
+apply plugin: 'java'
+apply plugin: 'idea'
+apply plugin: 'spring-boot'
+apply plugin: 'com.github.ksoichiro.web.resource'
+apply plugin: 'com.github.ksoichiro.build.info'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile "org.projectlombok:lombok:1.16.2"
+    compile "org.springframework.boot:spring-boot-starter-web"
+    compile "org.springframework.boot:spring-boot-starter-thymeleaf"
+    compile "org.springframework.boot:spring-boot-devtools"
+    compile "com.h2database:h2"
+}
+
+webResource {
+    base {
+        dest "build/resources/main/static"
+    }
+    bower {
+        dependencies {
+            install name: 'jquery', version: '1.11.2', filter: ['dist/*.min.*']
+            install name: 'bootstrap', version: '3.3.4', filter: ['dist/css/*.min.css', 'dist/js/*.min.js', 'dist/fonts/*']
+        }
+    }
+}
+classes.dependsOn 'webResourceCompile'
+
+buildInfo {
+    gitPropertiesEnabled true
+}
+
+idea {
+    module {
+        inheritOutputDirs = false
+        outputDir = file("${buildDir}/classes/main")
+        excludeDirs += [
+            file('src/main/resources/static/lib'),
+        ]
+    }
+    project {
+        languageLevel = vJavaLang
+        ipr {
+            withXml { provider ->
+                def mapping = provider.node.component.find { it.@name == 'VcsDirectoryMappings' }.mapping
+                mapping.@vcs = 'Git'
+                mapping.@directory = '$PROJECT_DIR$'
+            }
+        }
+    }
+}
