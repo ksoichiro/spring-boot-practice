@@ -22,7 +22,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         VersionResourceResolver versionResolver = new VersionResourceResolver()
             .addContentVersionStrategy("/css/**", "/js/**")
-            .addFixedVersionStrategy(gitProperties.getCommitId(), "/lib/**");
+            .addVersionStrategy(new PrefixAndFixedVersionStrategy("lib/", gitProperties.getCommitId()), "/lib/**");
         registry.addResourceHandler("/**")
             .addResourceLocations("classpath:static/")
             .setCachePeriod(null)
