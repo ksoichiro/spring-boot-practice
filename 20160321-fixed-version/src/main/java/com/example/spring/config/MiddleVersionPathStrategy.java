@@ -26,7 +26,7 @@ public class MiddleVersionPathStrategy implements VersionPathStrategy {
 
     @Override
     public String removeVersion(String requestPath, String version) {
-        return requestPath.substring(this.prefix.length()).substring(this.version.length());
+        return this.prefix + requestPath.substring(this.prefix.length() + this.version.length());
     }
 
     @Override
@@ -35,7 +35,15 @@ public class MiddleVersionPathStrategy implements VersionPathStrategy {
         if (path.startsWith(".")) {
             return path;
         } else {
-            return (path.startsWith("/") ? this.prefix + this.version + path : this.prefix + this.version + "/" + path);
+            String p = path;
+            if (p.startsWith("/")) {
+                p = p.substring(1);
+            }
+            if (p.startsWith(this.prefix)) {
+                return this.prefix + this.version + "/" + p.substring(this.prefix.length());
+            } else {
+                return path;
+            }
         }
     }
 }
