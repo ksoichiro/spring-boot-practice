@@ -26,7 +26,7 @@ public class MiddleVersionPathStrategy implements VersionPathStrategy {
 
     @Override
     public String removeVersion(String requestPath, String version) {
-        return this.prefix + requestPath.substring(this.prefix.length() + this.version.length());
+        return this.prefix + requestPath.substring((this.prefix + this.version + "/").length());
     }
 
     @Override
