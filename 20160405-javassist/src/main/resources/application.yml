@@ -1,0 +1,10 @@
+spring:
+    jpa:
+        show-sql: true
+        hibernate:
+            ddl-auto: ''
+    thymeleaf:
+        cache: false
+application:
+    persistent-conditionally:
+        os-foo: true
