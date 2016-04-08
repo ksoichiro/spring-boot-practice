@@ -19,8 +19,15 @@ To check each topics, see each sub-directories' README.
     1. [Join using Querydsl with pagination](20150903-join-manytomany6)
     1. [Join using Querydsl with soft delete](20150903-join-manytomany7)
     1. [Join using JPA Criteria API with soft delete](20150908-join-manytomany8)
-1. Thymeleaf
-    1. [Helper Bean](20150910-thymeleaf-helper)
+1. [Helper Bean for Thymeleaf](20150910-thymeleaf-helper)
+1. [Testing with JDBC/JPA](20150911-test-jdbc)
+1. [Testing with MySQL](20151109-test-mysql)
+1. [Managing properties with multibyte and convert to ascii on build](20151208-properties)
+1. [Adding Git commit SHA to profile](20151210-git-sha-to-profile)
+1. [Handling web resource](20160221-web-resource)
+1. [Testing Controllers using MockMvc](20160307-test-controllers)
+1. [Adding fixed version to JavaScript/CSS libraries](20160321-fixed-version)
+1. [Using Javassist to conditionally make Entity's field persistent](20160405-javassist)
 
 ## Notice
 
