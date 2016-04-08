@@ -1,6 +1,6 @@
 # spring-boot-practice
 
-[![Build Status](https://travis-ci.org/ksoichiro/spring-boot-practice.svg?branch=master)](https://travis-ci.org/ksoichiro/spring-boot-practice)
+[![Build Status](https://img.shields.io/travis/ksoichiro/spring-boot-practice/master.svg?style=flat-square)](https://travis-ci.org/ksoichiro/spring-boot-practice)
 
 This is a project to show 'how-to' for Spring Boot application development.  
 
