@@ -14,3 +14,21 @@ checking all `@Entity` classes and modify class definition using Javassist.
 ```
 ./gradlew bootRun
 ```
+
+Change property:
+
+```
+./gradlew bootRun -Dapplication.persistent-conditionally.os-foo=false
+```
+
+## Test
+
+```
+./gradlew test
+```
+
+Change property:
+
+```
+./gradlew test -Dapplication.persistent-conditionally.os-foo=false
+```

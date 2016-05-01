@@ -1,6 +1,7 @@
 package com.example.spring.javassist;
 
 import com.example.spring.annotation.PersistentConditionallyOnProperty;
+import javassist.CannotCompileException;
 import javassist.ClassPool;
 import javassist.CtClass;
 import javassist.CtField;
@@ -29,6 +30,7 @@ public class ClassDefinitionModifier implements ApplicationListener {
         if (event instanceof ApplicationPreparedEvent) {
             Environment environment = ((ApplicationPreparedEvent) event).getApplicationContext().getEnvironment();
             try {
+                log.info("Modify classes");
                 modifyClasses(environment);
             } catch (Exception e) {
                 throw new RuntimeException(e);
@@ -43,58 +45,66 @@ public class ClassDefinitionModifier implements ApplicationListener {
         // ClassLoader is made for that.
         String[] classNames = new String[]{"com.example.spring.domain.Os", "com.example.spring.domain.Foo"};
 
-        ClassPool pool = ClassPool.getDefault();
-        for (String className : classNames) {
-            CtClass cc = pool.get(className);
-            ClassFile ccFile = cc.getClassFile();
-            ConstPool constPool = ccFile.getConstPool();
-
-            for (CtField cf : cc.getDeclaredFields()) {
-                AnnotationsAttribute attr = (AnnotationsAttribute) cf.getFieldInfo().getAttribute(AnnotationsAttribute.visibleTag);
-                if (attr == null) {
-                    // No annotation is defined for this field
-                    continue;
+        try {
+            ClassPool pool = ClassPool.getDefault();
+            for (String className : classNames) {
+                CtClass cc = pool.get(className);
+                if (cc.isFrozen()) {
+                    log.warn("Skip modifying classes because they've already been frozen.");
+                    break;
                 }
-                for (Annotation a : attr.getAnnotations()) {
-                    if (a.getTypeName().equals(PersistentConditionallyOnProperty.class.getCanonicalName())) {
-                        String value = ((StringMemberValue) a.getMemberValue("value")).getValue();
-                        String prop = environment.getProperty(value);
-                        Annotation[] annotations;
-                        if ("true".equals(prop)) {
-                            // Must be persistent
-                            annotations = new Annotation[attr.getAnnotations().length - 1];
+                ClassFile ccFile = cc.getClassFile();
+                ConstPool constPool = ccFile.getConstPool();
 
-                            for (int i = 0, j = 0; i < attr.getAnnotations().length; i++) {
-                                Annotation aa = attr.getAnnotations()[i];
-                                if (!aa.getTypeName().equals(PersistentConditionallyOnProperty.class.getCanonicalName())) {
-                                    annotations[j] = attr.getAnnotations()[i];
-                                    j++;
+                for (CtField cf : cc.getDeclaredFields()) {
+                    AnnotationsAttribute attr = (AnnotationsAttribute) cf.getFieldInfo().getAttribute(AnnotationsAttribute.visibleTag);
+                    if (attr == null) {
+                        // No annotation is defined for this field
+                        continue;
+                    }
+                    for (Annotation a : attr.getAnnotations()) {
+                        if (a.getTypeName().equals(PersistentConditionallyOnProperty.class.getCanonicalName())) {
+                            String value = ((StringMemberValue) a.getMemberValue("value")).getValue();
+                            String prop = environment.getProperty(value);
+                            Annotation[] annotations;
+                            if ("true".equals(prop)) {
+                                // Must be persistent
+                                annotations = new Annotation[attr.getAnnotations().length - 1];
+
+                                for (int i = 0, j = 0; i < attr.getAnnotations().length; i++) {
+                                    Annotation aa = attr.getAnnotations()[i];
+                                    if (!aa.getTypeName().equals(PersistentConditionallyOnProperty.class.getCanonicalName())) {
+                                        annotations[j] = attr.getAnnotations()[i];
+                                        j++;
+                                    }
+                                }
+                            } else {
+                                // Must be transient
+                                annotations = new Annotation[attr.getAnnotations().length];
+
+                                Annotation alternative = new Annotation("javax.persistence.Transient", constPool);
+                                for (int i = 0; i < attr.getAnnotations().length; i++) {
+                                    Annotation aa = attr.getAnnotations()[i];
+                                    if (aa.getTypeName().equals(PersistentConditionallyOnProperty.class.getCanonicalName())) {
+                                        annotations[i] = alternative;
+                                        log.info("Added @Transient to {}.{}", className, cf.getName());
+                                    } else {
+                                        annotations[i] = attr.getAnnotations()[i];
+                                    }
                                 }
                             }
-                        } else {
-                            // Must be transient
-                            annotations = new Annotation[attr.getAnnotations().length];
-
-                            Annotation alternative = new Annotation("javax.persistence.Transient", constPool);
-                            for (int i = 0; i < attr.getAnnotations().length; i++) {
-                                Annotation aa = attr.getAnnotations()[i];
-                                if (aa.getTypeName().equals(PersistentConditionallyOnProperty.class.getCanonicalName())) {
-                                    annotations[i] = alternative;
-                                    log.info("Added @Transient to {}.{}", className, cf.getName());
-                                } else {
-                                    annotations[i] = attr.getAnnotations()[i];
-                                }
-                            }
+                            attr.setAnnotations(annotations);
+                            Class thisClass = this.getClass();
+                            ClassLoader loader = thisClass.getClassLoader();
+                            ProtectionDomain domain = thisClass.getProtectionDomain();
+                            cc.toClass(loader, domain);
+                            break;
                         }
-                        attr.setAnnotations(annotations);
-                        Class thisClass = this.getClass();
-                        ClassLoader loader = thisClass.getClassLoader();
-                        ProtectionDomain domain = thisClass.getProtectionDomain();
-                        cc.toClass(loader, domain);
-                        break;
                     }
                 }
             }
+        } catch (CannotCompileException e) {
+            log.warn("Cannot modify classes", e);
         }
 
         // If the class names list are broken, it will be a critical error on runtime.

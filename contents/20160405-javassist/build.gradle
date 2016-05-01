@@ -26,6 +26,17 @@ dependencies {
     testCompile "org.springframework.boot:spring-boot-starter-test"
 }
 
+bootRun {
+    systemProperties = System.properties
+}
+
+test {
+    testLogging {
+        events 'started'
+    }
+    systemProperties = System.properties
+}
+
 idea {
     module {
         inheritOutputDirs = false
