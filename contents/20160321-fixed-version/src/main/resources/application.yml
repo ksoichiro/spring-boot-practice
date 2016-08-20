@@ -1,0 +1,14 @@
+spring:
+    thymeleaf:
+        cache: true
+    messages:
+        cache-seconds: -1
+    resources:
+        cache-period: 604800
+#logging:
+#    level:
+#        org.springframework.web.servlet: DEBUG
+#        org.springframework.web.servlet: TRACE
+security:
+    basic:
+        enabled: false
