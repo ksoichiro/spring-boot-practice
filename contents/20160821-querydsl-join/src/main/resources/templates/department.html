@@ -1,0 +1,31 @@
+<html xmlns:th="">
+<head>
+<link rel="stylesheet" type="text/css" th:href="@{/css/style.css}" />
+</head>
+<body>
+<h2>Departments</h2>
+<table>
+<thead>
+    <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Employees</th>
+    </tr>
+</thead>
+<tbody>
+    <tr th:each="entity : ${list}">
+        <td th:text="${entity.id}"></td>
+        <td th:text="${entity.name}"></td>
+        <td th:text="${entity.employeesList}"></td>
+    </tr>
+</tbody>
+</table>
+
+<nav th:replace="_pagination :: pagination(page=${list}, url='/department')"></nav>
+
+<div th:text="|Total: ${list.totalElements}|"></div>
+
+<div><a th:href="@{/}">Employees</a></div>
+
+</body>
+</html>

@@ -1,0 +1,106 @@
+import groovy.sql.Sql
+import com.mysema.query.sql.codegen.MetaDataExporter
+
+buildscript {
+    ext.querydslVersion = '3.6.7'
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath "org.springframework.boot:spring-boot-gradle-plugin:1.3.3.RELEASE"
+        classpath "com.mysema.querydsl:querydsl-sql-codegen:${querydslVersion}"
+    }
+}
+
+def vJavaLang = 1.8
+
+apply plugin: 'java'
+apply plugin: 'idea'
+apply plugin: 'spring-boot'
+
+repositories {
+    jcenter()
+}
+
+configurations {
+    provided
+    jdbcdriver
+}
+
+dependencies {
+    provided "com.mysema.querydsl:querydsl-apt:${querydslVersion}"
+    jdbcdriver "com.h2database:h2"
+    compile "org.projectlombok:lombok:1.16.2"
+    compile "org.springframework.boot:spring-boot-starter-web"
+    compile "org.springframework.boot:spring-boot-starter-thymeleaf"
+    compile "org.springframework.boot:spring-boot-starter-data-jpa"
+    compile "com.mysema.querydsl:querydsl-jpa:${querydslVersion}"
+    compile "com.mysema.querydsl:querydsl-sql:${querydslVersion}"
+    compile "com.h2database:h2"
+}
+
+bootRun {
+    // For debugging
+    addResources = true
+}
+
+def querydslDir = file('src/main/generated')
+
+task generateQuerydslSql {
+    doLast {
+        // Load H2 driver to the class loader of the task
+        // https://discuss.gradle.org/t/jdbc-driver-class-cannot-be-loaded-with-gradle-2-0-but-worked-with-1-12/2277/3
+        URLClassLoader loader = GroovyObject.class.classLoader
+        configurations.jdbcdriver.each { File file ->
+            loader.addURL(file.toURI().toURL())
+        }
+        def sql = Sql.newInstance('jdbc:h2:mem:', 'org.h2.Driver')
+        def statements = project.file('src/main/resources/schema.sql').text
+        statements.split(';').each { stmt ->
+            sql.execute(stmt)
+        }
+        MetaDataExporter exporter = new MetaDataExporter()
+        exporter.setNamePrefix('S')
+        exporter.setPackageName('com.example.spring.domain.sql')
+        exporter.setTargetFolder(querydslDir)
+        exporter.export(sql.getConnection().getMetaData())
+    }
+}
+
+task generateQuerydsl(type: JavaCompile) {
+    source = sourceSets.main.java
+    classpath = configurations.compile + configurations.provided
+    destinationDir = querydslDir
+    options.compilerArgs += [
+        '-proc:only',
+        '-processor', 'com.mysema.query.apt.jpa.JPAAnnotationProcessor'
+    ]
+}
+
+// generateQuerydslSql must run before generateQuerydsl
+generateQuerydsl.dependsOn generateQuerydslSql
+
+compileJava {
+    dependsOn generateQuerydsl
+    sourceSets.main.java.srcDir querydslDir
+}
+
+clean {
+    delete querydslDir
+}
+
+idea {
+    module {
+        inheritOutputDirs = false
+    }
+    project {
+        languageLevel = vJavaLang
+        ipr {
+            withXml { provider ->
+                def mapping = provider.node.component.find { it.@name == 'VcsDirectoryMappings' }.mapping
+                mapping.@vcs = 'Git'
+                mapping.@directory = '$PROJECT_DIR$'
+            }
+        }
+    }
+}

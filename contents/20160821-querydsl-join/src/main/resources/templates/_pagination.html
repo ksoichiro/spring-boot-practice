@@ -1,0 +1,27 @@
+<html xmlns:th="">
+<body>
+
+<nav th:fragment="pagination (page, url)" th:object="${page}" th:if="${page.size lt page.totalElements}">
+    <span th:class="*{first} ? 'disabled' : ''">
+        <a th:href="@{${url}(page=0)}" aria-label="Previous">
+            <span aria-hidden="true">&laquo;</span>
+        </a>
+    </span>
+    <span th:if="3 lt *{number} and *{totalPages} le *{number + 1}"><a th:href="@{${url}(page=*{number - 4})}" th:text="*{number - 3}"></a></span>
+    <span th:if="2 lt *{number} and *{totalPages} le *{number + 2}"><a th:href="@{${url}(page=*{number - 3})}" th:text="*{number - 2}"></a></span>
+    <span th:if="1 lt *{number}"><a th:href="@{${url}(page=*{number - 2})}" th:text="*{number - 1}">1</a></span>
+    <span th:if="0 lt *{number}"><a th:href="@{${url}(page=*{number - 1})}" th:text="*{number}">2</a></span>
+    <span class="active"><a th:href="@{${url}(page=*{number})}" th:text="*{number + 1}">3</a></span>
+    <span th:if="*{number + 1} lt *{totalPages}"><a th:href="@{${url}(page=*{number + 1})}" th:text="*{number + 2}">4</a></span>
+    <span th:if="*{number + 2} lt *{totalPages}"><a th:href="@{${url}(page=*{number + 2})}" th:text="*{number + 3}">5</a></span>
+    <span th:if="*{number} le 1 and *{number + 3} lt *{totalPages}"><a th:href="@{${url}(page=*{number + 3})}" th:text="*{number + 4}"></a></span>
+    <span th:if="*{number} le 0 and *{number + 4} lt *{totalPages}"><a th:href="@{${url}(page=*{number + 4})}" th:text="*{number + 5}"></a></span>
+    <span th:class="*{last} ? 'disabled' : ''">
+        <a th:href="@{${url}(page=*{totalPages - 1})}" aria-label="Next">
+            <span aria-hidden="true">&raquo;</span>
+        </a>
+    </span>
+</nav>
+
+</body>
+</html>
