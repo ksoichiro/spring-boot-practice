@@ -1,0 +1,49 @@
+@Grab('groovy-all')
+@Grab('org.codehaus.groovy.modules.http-builder:http-builder:0.7')
+
+import groovy.json.*
+import groovyx.net.http.*
+import static groovyx.net.http.ContentType.*
+
+@ConfigurationProperties(prefix = 'es')
+class EsExportConfigProperties {
+    String host = 'localhost'
+    int port = 9200
+    int balanceFrom = -1
+    int balanceTo = -1
+}
+
+@Component
+class EsExport implements CommandLineRunner {
+    @Autowired
+    EsExportConfigProperties esConfig
+
+    @Override
+    void run(String... args) {
+        def json = new JsonBuilder()
+        json {
+            query {
+                filtered {
+                    filter {
+                        bool {
+                            must {
+                                range {
+                                    balance {
+                                        from esConfig.balanceFrom
+                                        to esConfig.balanceTo
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        def http = new RESTClient("http://${esConfig.host}:${esConfig.port}/")
+        def result = http.post(path: 'bank/account/_search', contentType: JSON, body: json.toString()).data.hits.hits
+        result.each { hit ->
+            println JsonOutput.toJson([index: [_id: hit._id]])
+            println JsonOutput.toJson(hit._source)
+        }
+    }
+}
