@@ -22,6 +22,8 @@ class EsExport implements CommandLineRunner {
     void run(String... args) {
         def json = new JsonBuilder()
         json {
+            from 0
+            size 100
             query {
                 filtered {
                     filter {
@@ -40,10 +42,16 @@ class EsExport implements CommandLineRunner {
             }
         }
         def http = new RESTClient("http://${esConfig.host}:${esConfig.port}/")
-        def result = http.post(path: 'bank/account/_search', contentType: JSON, body: json.toString()).data.hits.hits
-        result.each { hit ->
-            println JsonOutput.toJson([index: [_id: hit._id]])
-            println JsonOutput.toJson(hit._source)
+        while (true) {
+            def result = http.post(path: 'bank/account/_search', contentType: JSON, body: json.toString()).data
+            if (result.hits.hits.size() == 0) {
+                break
+            }
+            result.hits.hits.each { hit ->
+                println JsonOutput.toJson([index: [_id: hit._id]])
+                println JsonOutput.toJson(hit._source)
+            }
+            json.content.from += json.content.size
         }
     }
 }

@@ -19,6 +19,8 @@ class EsExport implements CommandLineRunner {
     void run(String... args) {
         def json = new JsonBuilder()
         json {
+            from 0
+            size 100
             query {
                 filtered {
                     filter {
@@ -36,11 +38,17 @@ class EsExport implements CommandLineRunner {
                 }
             }
         }
-        def command = "curl --noproxy ${esConfig.host} http://${esConfig.host}:${esConfig.port}/bank/account/_search -d ${json.toString()}"
-        def result = new JsonSlurper().parseText(command.execute().text).hits.hits
-        result.each { hit ->
-            println JsonOutput.toJson([index: [_id: hit._id]])
-            println JsonOutput.toJson(hit._source)
+        while (true) {
+            def command = "curl --noproxy ${esConfig.host} http://${esConfig.host}:${esConfig.port}/bank/account/_search -d ${json.toString()}"
+            def result = new JsonSlurper().parseText(command.execute().text)
+            if (result.hits.hits.size() == 0) {
+                break
+            }
+            result.hits.hits.each { hit ->
+                println JsonOutput.toJson([index: [_id: hit._id]])
+                println JsonOutput.toJson(hit._source)
+            }
+            json.content.from += json.content.size
         }
     }
 }
