@@ -1,6 +1,16 @@
 # CLI script
 
+These examples require `spring` command.
+
 ## Install
+
+If you don't have sdkman:
+
+```
+curl -s "https://get.sdkman.io" | bash
+```
+
+Then,
 
 ```
 sdk install springboot
