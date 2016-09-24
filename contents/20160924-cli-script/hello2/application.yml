@@ -1,0 +1,8 @@
+# Suppress banner
+spring:
+  main:
+    banner-mode: "off"
+# All default logs can be suppressed
+logging:
+  level:
+    org.springframework: WARN
