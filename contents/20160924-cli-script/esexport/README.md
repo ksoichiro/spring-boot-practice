@@ -17,6 +17,14 @@ curl -XPOST 'localhost:9200/bank/account/_bulk?pretty' --data-binary "@accounts.
 spring run esexport.groovy -- --es.balanceFrom=20000 --es.balanceTo=30000 > export.json
 ```
 
+This is equivalent to:
+
+```
+./esexport.sh 20000 30000 > export.json
+```
+
+The above shell script requires [jq](https://stedolan.github.io/jq/) command.
+
 ## Import to another Elasticsearch cluster
 
 ```
