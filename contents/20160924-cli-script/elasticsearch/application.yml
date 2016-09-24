@@ -1,0 +1,7 @@
+spring:
+  data:
+    elasticsearch:
+      properties:
+        # Enable access via http://localhost:9200/
+        http:
+          enabled: true
