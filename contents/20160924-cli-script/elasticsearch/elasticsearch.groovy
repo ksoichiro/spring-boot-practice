@@ -2,7 +2,7 @@
 @RestController
 class Elasticsearch {
     @RequestMapping("/")
-     String index() {
-         "Hello, world!"
+    String index() {
+        "Hello, world!"
     }
 }

@@ -11,14 +11,9 @@ class EsExportConfigProperties {
 }
 
 @Component
-@ConfigurationProperties(prefix = 'es')
 class EsExport implements CommandLineRunner {
-    EsExportConfigProperties esConfig
-
     @Autowired
-    EsExport(EsExportConfigProperties esConfig) {
-        this.esConfig = esConfig
-    }
+    EsExportConfigProperties esConfig
 
     @Override
     void run(String... args) {
