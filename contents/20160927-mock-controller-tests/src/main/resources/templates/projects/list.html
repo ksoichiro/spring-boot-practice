@@ -1,0 +1,14 @@
+<html xmlns:th="">
+<head>
+<title>Projects</title>
+</head>
+<body>
+<h1>Projects list</h1>
+
+<table>
+    <tr th:each="obj : ${list}">
+        <td th:text="${obj.name}"></td>
+    </tr>
+</table>
+</body>
+</html>

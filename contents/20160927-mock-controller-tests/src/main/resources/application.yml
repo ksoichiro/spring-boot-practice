@@ -1,0 +1,11 @@
+spring:
+    datasource:
+        platform: h2
+    jpa:
+        show-sql: true
+        hibernate:
+            ddl-auto: ''
+server:
+    error:
+        whitelabel:
+            enabled: false
