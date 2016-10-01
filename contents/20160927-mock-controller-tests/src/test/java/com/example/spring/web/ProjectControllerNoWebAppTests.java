@@ -41,7 +41,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  */
 // To disable Elasticsearch auto configuration, add a special annotation.
 // In addition, add custom static Configuration class to control component scan.
-@SpringApplicationConfiguration(classes = {NoElasticsearchAutoConfigurationConfiguration.class, ProjectControllerTests.Config.class})
+@SpringApplicationConfiguration(classes = {NoElasticsearchAutoConfigurationConfiguration.class, ProjectControllerNoWebAppTests.Config.class})
 // To insert test fixture data:
 @Sql("/data-project.sql")
 // To disable inserting default data-{platform}.sql:
@@ -49,7 +49,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 // With this, all controllers will be mapped, which makes tests slower.
 // But in some cases, WebApplicationContext is required.
 //@WebAppConfiguration
-public class ProjectControllerTests {
+public class ProjectControllerNoWebAppTests {
     // With @ContextConfiguration, the internal static @Configuration classes will be automatically registered.
     @Configuration
     @ComponentScan(value = "com.example.spring", excludeFilters = {
