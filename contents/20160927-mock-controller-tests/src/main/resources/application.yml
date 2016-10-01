@@ -9,3 +9,8 @@ server:
     error:
         whitelabel:
             enabled: false
+logging:
+    level:
+        # These packages contain logs for @Bean registration
+        org.springframework.core.io.support: DEBUG
+        org.springframework.context.annotation: DEBUG
