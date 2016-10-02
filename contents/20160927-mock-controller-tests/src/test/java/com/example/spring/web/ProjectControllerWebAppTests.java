@@ -3,16 +3,12 @@ package com.example.spring.web;
 import com.example.spring.App;
 import com.example.spring.domain.Project;
 import org.junit.Before;
-import org.junit.ClassRule;
-import org.junit.Rule;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.data.domain.Page;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.jdbc.Sql;
-import org.springframework.test.context.junit4.rules.SpringClassRule;
-import org.springframework.test.context.junit4.rules.SpringMethodRule;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
@@ -34,17 +30,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 // To disable inserting default data-{platform}.sql:
 @TestPropertySource(properties = "spring.datasource.data: /data-empty.sql")
 @WebAppConfiguration
-public class ProjectControllerWebAppTests {
-    @ClassRule
-    public static final SpringClassRule SPRING_CLASS_RULE = new SpringClassRule();
-
-    @Rule
-    public final SpringMethodRule springMethodRule = new SpringMethodRule();
-
+public class ProjectControllerWebAppTests extends AbstractControllerTests {
     @Autowired
     private WebApplicationContext webApplicationContext;
-
-    private MockMvc mockMvc;
 
     @Before
     public void setUp() {

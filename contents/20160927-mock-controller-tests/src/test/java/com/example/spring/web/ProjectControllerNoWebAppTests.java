@@ -1,30 +1,15 @@
 package com.example.spring.web;
 
-import com.example.spring.annotation.ElasticsearchDependentService;
 import com.example.spring.domain.Project;
 import org.junit.Before;
-import org.junit.ClassRule;
-import org.junit.Rule;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.web.DefaultErrorAttributes;
-import org.springframework.boot.autoconfigure.web.ErrorAttributes;
-import org.springframework.boot.orm.jpa.EntityScan;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.FilterType;
 import org.springframework.data.domain.Page;
-import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
-import org.springframework.stereotype.Controller;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.jdbc.Sql;
-import org.springframework.test.context.junit4.rules.SpringClassRule;
-import org.springframework.test.context.junit4.rules.SpringMethodRule;
-import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.ui.ModelMap;
@@ -49,40 +34,15 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 // With this, all controllers will be mapped, which makes tests slower.
 // But in some cases, WebApplicationContext is required.
 //@WebAppConfiguration
-public class ProjectControllerNoWebAppTests {
-    // With @ContextConfiguration, the internal static @Configuration classes will be automatically registered.
-    @Configuration
-    @ComponentScan(value = "com.example.spring", excludeFilters = {
-        // To avoid registration of Application class in src/main
-        @ComponentScan.Filter(type = FilterType.ANNOTATION, classes = SpringBootApplication.class),
-        @ComponentScan.Filter(type = FilterType.ANNOTATION, classes = ElasticsearchDependentService.class),
-        // With this, you can avoid many Bean registrations, but it's often difficult
-        // @ComponentScan.Filter(type = FilterType.ANNOTATION, classes = Configuration.class),
-        @ComponentScan.Filter(type = FilterType.ANNOTATION, classes = Controller.class)
-    })
-    @EnableJpaRepositories("com.example.spring.repository")
-    @EntityScan("com.example.spring.domain")
-    static class Config {
-        // Without @WebAppConfiguration and @SpringBootApplication, this definition is required
-        @Bean
-        ErrorAttributes errorAttributes() {
-            return new DefaultErrorAttributes();
-        }
-
+public class ProjectControllerNoWebAppTests extends AbstractControllerTests {
+    @StandaloneControllerConfiguration
+    static class Config extends DefaultStandaloneControllerConfig {
         // Test target Controller
         @Bean
         ProjectController projectController() {
             return new ProjectController();
         }
     }
-
-    @ClassRule
-    public static final SpringClassRule SPRING_CLASS_RULE = new SpringClassRule();
-
-    @Rule
-    public final SpringMethodRule springMethodRule = new SpringMethodRule();
-
-    private MockMvc mockMvc;
 
     @Autowired
     private ProjectController projectController;
