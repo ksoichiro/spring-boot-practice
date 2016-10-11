@@ -1,0 +1,41 @@
+<html xmlns:th="">
+<head>
+<style>
+table {
+  border-collapse: collapse;
+}
+th, td {
+  border: 1px solid #000;
+  padding: 8px;
+}
+</style>
+</head>
+<body>
+<table>
+<thead>
+    <tr>
+        <th>ID</th>
+        <th>A</th>
+        <th>B</th>
+        <th>C</th>
+        <th>D</th>
+        <th>E1</th>
+        <th>E2</th>
+        <th>E3</th>
+    </tr>
+</thead>
+<tbody>
+    <tr th:each="entity : ${aList}">
+        <td th:text="${entity.id}"></td>
+        <td th:text="${entity.name}"></td>
+        <td th:text="${entity.bName}"></td>
+        <td th:text="${entity.cName}"></td>
+        <td th:text="${entity.dName}"></td>
+        <td th:text="${entity.e1}"></td>
+        <td th:text="${entity.e2}"></td>
+        <td th:text="${entity.e3}"></td>
+    </tr>
+</tbody>
+</table>
+</body>
+</html>
