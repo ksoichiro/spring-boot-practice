@@ -1,6 +1,7 @@
 package com.example.spring.web;
 
 import com.example.spring.service.AService;
+import com.mysema.query.Tuple;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -26,6 +27,15 @@ public class IndexController {
     @RequestMapping("/")
     public String index(Model model, @PageableDefault(size = 3) Pageable pageable) {
         model.addAttribute("aList", aService.findAll(pageable));
+        model.addAttribute("aTupleList", aService.findAllAsTuple(pageable));
         return "index";
+    }
+
+    public Integer getInt(Tuple tuple, int index) {
+        return tuple.get(index, Integer.class);
+    }
+
+    public String getString(Tuple tuple, int index) {
+        return tuple.get(index, String.class);
     }
 }

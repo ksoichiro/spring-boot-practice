@@ -11,6 +11,9 @@ th, td {
 </style>
 </head>
 <body>
+
+<h2>Constructor</h2>
+
 <table>
 <thead>
     <tr>
@@ -34,6 +37,35 @@ th, td {
         <td th:text="${entity.e1}"></td>
         <td th:text="${entity.e2}"></td>
         <td th:text="${entity.e3}"></td>
+    </tr>
+</tbody>
+</table>
+
+<h2>Tuple</h2>
+
+<table>
+<thead>
+    <tr>
+        <th>ID</th>
+        <th>A</th>
+        <th>B</th>
+        <th>C</th>
+        <th>D</th>
+        <th>E1</th>
+        <th>E2</th>
+        <th>E3</th>
+    </tr>
+</thead>
+<tbody>
+    <tr th:each="entity : ${aTupleList}">
+        <td th:text="${@indexController.getInt(entity, 0)}"></td>
+        <td th:text="${@indexController.getString(entity, 1)}"></td>
+        <td th:text="${@indexController.getString(entity, 2)}"></td>
+        <td th:text="${@indexController.getString(entity, 3)}"></td>
+        <td th:text="${@indexController.getString(entity, 4)}"></td>
+        <td th:text="${@indexController.getString(entity, 5)}"></td>
+        <td th:text="${@indexController.getString(entity, 6)}"></td>
+        <td th:text="${@indexController.getString(entity, 7)}"></td>
     </tr>
 </tbody>
 </table>

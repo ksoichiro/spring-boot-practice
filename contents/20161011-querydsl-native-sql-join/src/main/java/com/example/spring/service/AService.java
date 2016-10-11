@@ -5,6 +5,7 @@ import com.example.spring.domain.sql.*;
 import com.example.spring.entity.ExtendedA;
 import com.example.spring.service.sql.QuerydslSQL;
 import com.example.spring.service.sql.SQLTemplatesService;
+import com.mysema.query.Tuple;
 import com.mysema.query.jpa.sql.JPASQLQuery;
 import com.mysema.query.sql.SQLSubQuery;
 import com.mysema.query.types.Predicate;
@@ -58,6 +59,38 @@ public class AService {
                     e2.name,
                     e3.name
                 ));
+
+        return new PageImpl<>(content, pageable, total);
+    }
+
+    public Page<Tuple> findAllAsTuple(Pageable pageable) {
+        Predicate predicate = null; // TODO
+
+        SA a = SA.a;
+        SB b = SB.b;
+        SC c = SC.c;
+        SD d = SD.d;
+        SE e1 = new SE("E1");
+        SE e2 = new SE("E2");
+        SE e3 = new SE("E3");
+
+        PathBuilder<A> builder = new PathBuilder<>(A.class, a.getMetadata());
+        QuerydslSQL querydsl = new QuerydslSQL(builder);
+
+        JPASQLQuery query = querydsl.applyPagination(pageable, createQuery(predicate));
+        Long total = createQuery(predicate).count();
+
+        List<Tuple> content =
+            query.orderBy(a.id.asc()).list(
+                a.id,
+                a.name,
+                b.name,
+                c.name,
+                d.name,
+                e1.name,
+                e2.name,
+                e3.name
+            );
 
         return new PageImpl<>(content, pageable, total);
     }
