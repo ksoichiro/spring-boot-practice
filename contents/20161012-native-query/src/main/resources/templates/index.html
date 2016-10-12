@@ -1,0 +1,52 @@
+<html xmlns:th="">
+<head>
+<style>
+table {
+  border-collapse: collapse;
+}
+th, td {
+  border: 1px solid #000;
+  padding: 8px;
+}
+</style>
+</head>
+<body>
+
+<h2>Method 1</h2>
+<table>
+<thead>
+    <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Department</th>
+    </tr>
+</thead>
+<tbody>
+    <tr th:each="entity : ${list}">
+        <td th:text="${entity.id}"></td>
+        <td th:text="${entity.name}"></td>
+        <td th:text="${entity.departmentName}"></td>
+    </tr>
+</tbody>
+</table>
+
+<h2>Method 2</h2>
+<table>
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Department</th>
+    </tr>
+    </thead>
+<tbody>
+    <tr th:each="entity : ${list2}">
+        <td th:text="${entity.id}"></td>
+        <td th:text="${entity.name}"></td>
+        <td th:text="${entity.departmentName}"></td>
+    </tr>
+</tbody>
+</table>
+
+</body>
+</html>
