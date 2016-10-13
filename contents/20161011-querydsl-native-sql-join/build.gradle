@@ -50,7 +50,7 @@ task generateQuerydslSql {
         configurations.jdbcdriver.each { File file ->
             loader.addURL(file.toURI().toURL())
         }
-        def sql = Sql.newInstance('jdbc:h2:mem:', 'org.h2.Driver')
+        def sql = Sql.newInstance('jdbc:h2:mem:;MODE=MySQL', 'org.h2.Driver')
         def statements = project.file('src/main/resources/schema.sql').text
         statements.split(';').each { stmt ->
             sql.execute(stmt)
