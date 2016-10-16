@@ -60,7 +60,7 @@ public class LogAdvice {
             log(getMethodName(pjp));
             return retVal;
         } catch (Throwable t) {
-            log(getMethodName(pjp), t.getMessage());
+            log(getMethodName(pjp), t.getMessage(), t);
             throw t;
         }
     }
