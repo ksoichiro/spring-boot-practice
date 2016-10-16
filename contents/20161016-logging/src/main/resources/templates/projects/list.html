@@ -1,0 +1,14 @@
+<html xmlns:th="">
+<head>
+<title>Projects</title>
+</head>
+<body>
+<div th:object="${projectCreateForm}" th:if="${#arrays.length(#fields.detailedErrors())} == 0">
+    <div th:each="error : ${#fields.detailedErrors()}">
+        <span th:text="${error.message}">Error message</span>
+    </div>
+</div>
+
+<div th:replace="list :: links"></div>
+</body>
+</html>

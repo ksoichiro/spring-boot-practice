@@ -1,0 +1,13 @@
+<html xmlns:th="">
+<head>
+<title>Error</title>
+</head>
+<body>
+<h2>Error</h2>
+<div>
+    <h3 th:text="|HTTP ${attrs.status} ${attrs.error}|"></h3>
+    <p th:text="${attrs.message}"></p>
+</div>
+<div th:replace="list :: links"></div>
+</body>
+</html>

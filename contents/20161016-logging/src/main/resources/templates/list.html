@@ -1,0 +1,15 @@
+<html xmlns:th="">
+<body>
+<div th:fragment="links">
+    <div>
+    <p><a th:href="@{/projects}">list</a></p>
+    <p><a th:href="@{/projects/ex}">list with exception</a></p>
+    <p><a th:href="@{/projects/create}">create with validation error</a></p>
+    <p><a th:href="@{/projects/create/ex}">create with validation error and exception</a></p>
+    <p><a th:href="@{/projects/create?name=foo}">create without validation error</a></p>
+    <p><a th:href="@{/projects/create/ex?name=foo}">create without validation error with exception</a></p>
+    <p><a th:href="@{/projects/create?name=bar}">create without validation error with service exception</a></p>
+    </div>
+</div>
+</body>
+</html>
