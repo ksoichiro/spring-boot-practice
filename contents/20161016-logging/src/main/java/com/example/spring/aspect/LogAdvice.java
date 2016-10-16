@@ -37,36 +37,13 @@ public class LogAdvice {
     public void requestMapping() {
     }
 
-    @Pointcut("args(*,bindingResult,..)")
-    public void bindingResult(BindingResult bindingResult) {
-    }
-
-    @Pointcut("controller() && requestMapping() && !bindingResult(*)")
-    public void requestMappedControllerMethod() {
-    }
-
-    @Pointcut("controller() && requestMapping() && bindingResult(bindingResult)")
-    public void requestMappedControllerWithBidingResultMethod(BindingResult bindingResult) {
-    }
-
     @Pointcut("execution(* com.example.spring..*.*(..))")
     public void anyProjectMethodExecution() {
     }
 
-    @Around("requestMappedControllerMethod() && anyProjectMethodExecution()")
+    @Around("controller() && requestMapping() && anyProjectMethodExecution()")
     public Object log(ProceedingJoinPoint pjp) throws Throwable {
-        try {
-            Object retVal = pjp.proceed();
-            log(getMethodName(pjp));
-            return retVal;
-        } catch (Throwable t) {
-            log(getMethodName(pjp), t.getMessage(), t);
-            throw t;
-        }
-    }
-
-    @Around("requestMappedControllerWithBidingResultMethod(bindingResult) && anyProjectMethodExecution()")
-    public Object logWithBindingResult(ProceedingJoinPoint pjp, BindingResult bindingResult) throws Throwable {
+        BindingResult bindingResult = getBindingResult(pjp);
         try {
             Object retVal = pjp.proceed();
             Throwable caughtError = getCaughtError(pjp, bindingResult);
@@ -81,7 +58,7 @@ public class LogAdvice {
     private void log(Object... params) {
         if (params[params.length - 1] instanceof Throwable) {
             String serialized = Arrays.stream(params).limit(params.length - 1).map(p -> p == null ? "-" : p.toString()).collect(Collectors.joining(" "));
-            log.info("{}", serialized, params[params.length - 1]);
+            log.warn("{}", serialized, params[params.length - 1]);
         } else {
             String serialized = Arrays.stream(params).map(p -> p == null ? "-" : p.toString()).collect(Collectors.joining(" "));
             log.info("{}", serialized);
@@ -115,8 +92,17 @@ public class LogAdvice {
         return null;
     }
 
+    private BindingResult getBindingResult(ProceedingJoinPoint pjp) {
+        for (Object arg : pjp.getArgs()) {
+            if (arg != null && arg instanceof BindingResult) {
+                return (BindingResult) arg;
+            }
+        }
+        return null;
+    }
+
     private String getErrors(BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) {
+        if (bindingResult != null && bindingResult.hasErrors()) {
             return bindingResult.getAllErrors().stream().map(map -> {
                 if (map instanceof FieldError) {
                     return ((FieldError) map).getField() + " " + map.getDefaultMessage();

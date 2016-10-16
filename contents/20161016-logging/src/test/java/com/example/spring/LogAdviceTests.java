@@ -13,7 +13,10 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+import java.util.Arrays;
+
 import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.stringContainsInOrder;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -51,8 +54,10 @@ public class LogAdviceTests {
                 .andExpect(status().is5xxServerError());
             fail();
         } catch (Exception ignore) {
-            assertThat(capture.toString(), containsString("ProjectController#listWithException This is a test exception"));
-            assertThat(capture.toString(), containsString("java.lang.RuntimeException: This is a test exception"));
+            assertThat(capture.toString(),
+                stringContainsInOrder(Arrays.asList(
+                    "ProjectController#listWithException - This is a test exception",
+                    "java.lang.RuntimeException: This is a test exception")));
         }
     }
 
@@ -70,8 +75,10 @@ public class LogAdviceTests {
                 .andExpect(status().is5xxServerError());
             fail();
         } catch (Exception ignore) {
-            assertThat(capture.toString(), containsString("ProjectController#createWithException [name は入力必須です, パラメータfooを持つメッセージです] This is a test exception"));
-            assertThat(capture.toString(), containsString("java.lang.RuntimeException: This is a test exception"));
+            assertThat(capture.toString(),
+                stringContainsInOrder(Arrays.asList(
+                    "ProjectController#createWithException [name は入力必須です, パラメータfooを持つメッセージです] This is a test exception",
+                    "java.lang.RuntimeException: This is a test exception")));
         }
     }
 
@@ -89,8 +96,10 @@ public class LogAdviceTests {
                 .andExpect(status().is5xxServerError());
             fail();
         } catch (Exception ignore) {
-            assertThat(capture.toString(), containsString("ProjectController#createWithException - This is a test exception"));
-            assertThat(capture.toString(), containsString("java.lang.RuntimeException: This is a test exception"));
+            assertThat(capture.toString(),
+                stringContainsInOrder(Arrays.asList(
+                    "ProjectController#createWithException - This is a test exception",
+                    "java.lang.RuntimeException: This is a test exception")));
         }
     }
 
@@ -98,7 +107,9 @@ public class LogAdviceTests {
     public void createWithoutValidationErrorWithServiceException() throws Exception {
         mockMvc.perform(get("/projects/create").param("name", "bar"))
             .andExpect(status().isOk());
-        assertThat(capture.toString(), containsString("ProjectController#create [エラーがあります] Service throws exception"));
-        assertThat(capture.toString(), containsString("java.lang.IllegalStateException: Service throws exception"));
+        assertThat(capture.toString(),
+                stringContainsInOrder(Arrays.asList(
+                    "ProjectController#create [エラーがあります] Service throws exception",
+                    "java.lang.IllegalStateException: Service throws exception")));
     }
 }
