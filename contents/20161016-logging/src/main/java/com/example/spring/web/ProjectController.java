@@ -43,7 +43,7 @@ public class ProjectController {
     }
 
     @RequestMapping("/projects/create")
-    public String create(@Validated ProjectCreateForm projectCreateForm, BindingResult bindingResult, Model model) {
+    public String create(@Validated ProjectCreateForm projectCreateForm, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             bindingResult.reject("message.error.param", new Object[]{"foo"}, null);
             return "projects/list";
@@ -57,7 +57,7 @@ public class ProjectController {
     }
 
     @RequestMapping("/projects/create/ex")
-    public String createWithException(@Validated ProjectCreateForm projectCreateForm, BindingResult bindingResult, Model model) {
+    public String createWithException(@Validated ProjectCreateForm projectCreateForm, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             bindingResult.reject("message.error.param", new Object[]{"foo"}, null);
             throw new RuntimeException("This is a test exception");

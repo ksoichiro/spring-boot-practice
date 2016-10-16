@@ -10,7 +10,6 @@ import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Component;
-import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 
@@ -71,23 +70,10 @@ public class LogAdvice {
     }
 
     private Throwable getCaughtError(ProceedingJoinPoint pjp, BindingResult bindingResult) {
-        Model model = getModel(pjp);
-        if (model == null) {
-            return null;
-        }
         Object attr = request.getAttribute(LogHandler.CAUGHT_ERROR_ATTRIBUTE_NAME);
         if (attr != null && attr instanceof Throwable) {
             bindingResult.reject("message.error");
             return (Throwable) attr;
-        }
-        return null;
-    }
-
-    private Model getModel(ProceedingJoinPoint pjp) {
-        for (Object arg : pjp.getArgs()) {
-            if (arg != null && arg instanceof Model) {
-                return (Model) arg;
-            }
         }
         return null;
     }
