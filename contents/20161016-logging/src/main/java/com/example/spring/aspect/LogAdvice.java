@@ -45,7 +45,7 @@ public class LogAdvice {
         BindingResult bindingResult = getBindingResult(pjp);
         try {
             Object retVal = pjp.proceed();
-            Throwable caughtError = getCaughtError(pjp, bindingResult);
+            Throwable caughtError = getCaughtError(bindingResult);
             log(getMethodName(pjp), getErrors(bindingResult), caughtError == null ? "-" : caughtError.getMessage(), caughtError);
             return retVal;
         } catch (Throwable t) {
@@ -69,7 +69,7 @@ public class LogAdvice {
         return sig.getDeclaringType().getSimpleName() + "#" + sig.getName();
     }
 
-    private Throwable getCaughtError(ProceedingJoinPoint pjp, BindingResult bindingResult) {
+    private Throwable getCaughtError(BindingResult bindingResult) {
         Object attr = request.getAttribute(LogHandler.CAUGHT_ERROR_ATTRIBUTE_NAME);
         if (attr != null && attr instanceof Throwable) {
             bindingResult.reject("message.error");
