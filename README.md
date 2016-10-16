@@ -28,13 +28,21 @@ To check each topics, see each sub-directories' README.
 1. [Testing Controllers using MockMvc](contents/20160307-test-controllers)
 1. [Adding fixed version to JavaScript/CSS libraries](contents/20160321-fixed-version)
 1. [Using Javassist to conditionally make Entity's field persistent](contents/20160405-javassist)
+1. [Modifying class definition using Javassist](contents/20160405-javassist)
+1. [Query validation for Repositories](contents/20160720-query-validation)
+1. [Using native functions with Querydsl](contents/20160821-querydsl-join)
+1. [Running small apps using Spring Boot CLI](contents/20160924-cli-script)
+1. [Testing controllers faster](contents/20160927-mock-controller-tests)
+1. [Using subquery in native SQL join clause with Querydsl](contents/20161011-querydsl-native-sql-join)
+1. [Result set mapping for native queries](contents/20161012-native-query)
+1. [Logging controller method execution using AOP](contents/20161016-logging)
 
 ## Notice
 
 * This project uses Gradle and developed with IntelliJ IDEA.
 * This project uses Java 8 lambda expression.
     * Please set Gradle JVM to Java 8 to build properly.
-* This project uses Lombok to generate getters/setters.
+* This project uses [Lombok](https://projectlombok.org/) to generate getters/setters.
     * Please set Annotation Processor function enabled (Preferences > Build, Execution, Deployment > Compiler > Enable annotation processing).
 
 ## License
