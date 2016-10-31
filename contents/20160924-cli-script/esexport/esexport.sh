@@ -35,7 +35,7 @@ do
         break
     fi
 
-    echo "$result" | jq -c -M '.hits.hits[]' | while read line
+    echo "$result" | jq -c -M '.hits.hits[]' | while read -r line
     do
         echo $line | jq -c -M '{index: {_id: ._id}}'
         echo $line | jq -c -M '._source'
