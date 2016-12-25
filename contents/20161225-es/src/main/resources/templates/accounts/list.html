@@ -1,0 +1,16 @@
+<html xmlns:th="">
+<head>
+<title>Accounts</title>
+</head>
+<body>
+
+<table>
+<tr th:each="account : ${accounts}" th:object="${account}">
+    <td th:text="*{accountNumber}"></td>
+    <td th:text="*{firstname}"></td>
+    <td th:text="*{lastname}"></td>
+    <td th:text="*{balance}"></td>
+</tr>
+</table>
+</body>
+</html>

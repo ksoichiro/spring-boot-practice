@@ -1,0 +1,15 @@
+spring:
+    data:
+        elasticsearch:
+            properties:
+                http:
+                    enabled: true
+                index:
+                    search:
+                        slowlog:
+                            threshold:
+                                query:
+                                    info: "0s"
+logging:
+    level:
+        org.elasticsearch.cluster.routing.allocation.decider: ERROR
